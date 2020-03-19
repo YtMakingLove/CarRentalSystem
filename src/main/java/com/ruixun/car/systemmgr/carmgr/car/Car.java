@@ -2,7 +2,6 @@ package com.ruixun.car.systemmgr.carmgr.car;
 
 
 import java.time.LocalDate;
-import java.util.Date;
 
 /**
  * 汽车类

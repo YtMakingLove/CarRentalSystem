@@ -17,7 +17,6 @@ import java.util.Date;
  * @date 2020/3/6 - 17:51
  */
 public class DateHelper {
-    //private static final ThreadLocal<DateFormat> sdf = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
     /**
      * 指定模板的日期格式化类对象--java8新的日期类
      */
@@ -52,12 +51,8 @@ public class DateHelper {
      * @return
      */
     public static LocalDate getDate(String date)  {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return LocalDate.parse(date, formatter);
-    }
-
-    public static void main(String[] args) throws ParseException {
-        System.out.println(getDate("2020-02-12"));
+        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return LocalDate.parse(date, dateTimeFormatter);
     }
 
     /**

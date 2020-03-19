@@ -6,10 +6,22 @@
     <type>1</type>  
     <date>2020-03-09</date> 
   </record>  
-  <record id="2">
-    <carId>川B7823</carId>
-    <pid>9848328432043289</pid>
+  <record id="2"> 
+    <carId>川B7823</carId>  
+    <pid>9848328432043289</pid>  
+    <type>2</type>  
+    <date>2020-03-09</date> 
+  </record>  
+  <record id="3"> 
+    <carId>鲁8739</carId>  
+    <pid>34832947329432473</pid>  
+    <type>1</type>  
+    <date>2020-03-17</date> 
+  </record>  
+  <record id="4">
+    <carId>鲁8739</carId>
+    <pid>34832947329432473</pid>
     <type>2</type>
-    <date>2020-03-09</date>
+    <date>2020-03-17</date>
   </record>
 </records>

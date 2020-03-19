@@ -11,7 +11,6 @@ import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
-
 import java.io.*;
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -46,8 +45,6 @@ public class CarMgr {
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("加载车库车辆信息出错！");
-        } catch (ParseException e) {
-            e.printStackTrace();
         }
     }
 
@@ -68,7 +65,7 @@ public class CarMgr {
     /**
      * 加载汽车信息
      */
-    private boolean load() throws IOException, ParseException {
+    private boolean load() throws IOException {
         try(BufferedReader buffReader = new BufferedReader(new FileReader("car.txt"))) {
             String hasLine;
             while ((hasLine = buffReader.readLine()) != null){
@@ -214,8 +211,10 @@ public class CarMgr {
                         return cars;
                     }
                 }
+                //该车已出租
                 return "1";
             }
+            //该车已报废
             return "2";
         }
         //没该车牌对应的汽车信息
@@ -244,12 +243,13 @@ public class CarMgr {
                           String state, int seatCountOrWeight, int carType) throws IOException {
 
         boolean flag = false;
-        synchronized (CarMgr.class) {
+        synchronized (this) {
 //            try {
 //                Thread.sleep(2000);
 //            } catch (InterruptedException e) {
 //                e.printStackTrace();
 //            }
+
             //遍历所有car对象
             for (Car car : carSet) {
                 //查找carSet中是否已有该车牌
@@ -269,7 +269,7 @@ public class CarMgr {
 //                        } catch (InterruptedException e) {
 //                            e.printStackTrace();
 //                        }
-                        //System.out.println(Thread.currentThread().getName() + " : 入库了车牌为：" + id);
+//                        System.out.println(Thread.currentThread().getName() + " : 入库了车牌为：" + id);
                         return true;
                     }else {
                         //将货车信息添加到carSet中，查询carSet中是否已存储该车牌信息
@@ -277,10 +277,11 @@ public class CarMgr {
                                 rent_security, rent_money_day, state, seatCountOrWeight));
                         //并保存到car.txt文件中
                         save();
-                        //System.out.println(Thread.currentThread().getName() + " : 入库了车牌为：" + id);
+                        System.out.println(Thread.currentThread().getName() + " : 入库了车牌为：" + id);
                         return true;
                     }
             }else {
+                //System.out.println(Thread.currentThread().getName() + ":已有该车牌");
                 //已有该车牌
                 return false;
             }
@@ -288,14 +289,14 @@ public class CarMgr {
 
     }
     public static void main(String[] args) {
-        String carId = "鲁A87Y8";
+        CarMgr carMgr = new CarMgr();
         new Thread(() -> {
             try {
-//                new CarMgr().carAdd("鲁8739", "FF8484", "宝马x5", "红色",
+//                carMgr.carAdd("鲁8739", "FF8484", "宝马x5", "红色",
 //                        DateHelper.getDate("2020-09-08"), 87333, "#97",
 //                        80000,
 //                        788, "空闲", 7, 1);
-                new CarMgr().carStop(carId);
+                carMgr.carStop("鲁8739");
             }catch (IOException e) {
                 e.printStackTrace();
             }
@@ -303,11 +304,11 @@ public class CarMgr {
 
         new Thread(() -> {
             try {
-//                new CarMgr().carAdd("鲁8739", "FF8484", "宝马x5", "红色",
+//                carMgr.carAdd("鲁8739", "FF8484", "宝马x5", "红色",
 //                        DateHelper.getDate("2020-09-08"), 87333, "#97",
 //                        80000,
 //                        788, "空闲", 7, 1);
-                new CarMgr().carStop(carId);
+                carMgr.carStop("鲁8739");
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -320,12 +321,13 @@ public class CarMgr {
      * @param id 车牌号(车辆唯一标识)
      */
     public boolean carStop(String id) throws IOException {
+
         //在carSet中找到当前车牌对应的车辆信息
         for (Car car: carSet) {
-            synchronized (CarMgr.class) {
+            synchronized (this) {
                 if (car.getId().equals(id)){
                     if (car.getState().equals(Car.STATE_BAOFEI)){
-                        System.out.println("该车已报废！");
+                        System.out.println(Thread.currentThread().getName() + ": 该车已报废！");
                         return false;
                     }
                     try {
@@ -337,7 +339,7 @@ public class CarMgr {
                     car.setState(Car.STATE_BAOFEI);
                     //将更新的状况信息更新到car.txt中
                     save();
-                   // System.out.println(Thread.currentThread().getName() + " : 报废了" + id);
+                   System.out.println(Thread.currentThread().getName() + " : 报废了" + id);
                     return true;
                 }
             }

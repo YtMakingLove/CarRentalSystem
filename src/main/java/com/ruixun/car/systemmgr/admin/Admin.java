@@ -22,6 +22,7 @@ import java.util.Set;
  */
 public class Admin {
 
+
     /**
      * 代表系统中所有管理员对象的列表
      */
@@ -61,6 +62,7 @@ public class Admin {
     public static Admin login(String loginId, String loginPsw) throws IOException {
         //先调用load()方法加载admin.txt中所有用户信息
         load();
+        System.out.println(adminLinkedHashSet);
         //遍历所有Admin对象
         for (Admin admin1 : adminLinkedHashSet) {
             //在所有的Admin对象中操作是否存在当前登录的用户名和密码

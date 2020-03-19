@@ -3,7 +3,6 @@ package com.ruixun.car.systemmgr.carmgr.car.cartype;
 import com.ruixun.car.systemmgr.carmgr.car.Car;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 /**
  * 货车
